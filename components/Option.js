@@ -1,14 +1,47 @@
-import React from "react";
-import Quiz from "./Quiz";
+import React, { useState, useEffect } from "react"
 
 export default function Option(props) {
-  const optionElements = props.answers.map((item,index) => (
-    <div key={index}>{item}</div>
-  ));
+  const [selectedOption, setSelectedOption] = useState();
+
+  function handleChange(option) {
+    setSelectedOption(option);
+    props.handleOptionSelected(option);
+  }
+
+  const optionElements = props.answers.map((item, index) => {
+
+
+    return (
+      <div
+        key={index}
+        onClick={() => handleChange(item)}
+        className={
+          props.isChecked
+            ?
+            item === props.correctAnswer
+              ? "correct"
+              : item === selectedOption
+                ? "incorrect"
+                : "option"
+            : item === selectedOption
+              ? "selected"
+              : "option"
+        }
+      >
+        {item}
+      </div>
+    );
+  });
 
   return (
-    <div>
-    <Quiz optionElements={optionElements}/>
-    </div>
-  );
+    <div className="quiz--homescreen">
+  <div className="option--container">
+    {optionElements}
+    
+  </div>
+ // </div>
+  )
 }
+
+
+

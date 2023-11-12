@@ -1,21 +1,10 @@
-import React from "react";
-import Option from "./Option";
-import Quiz from "./Quiz";
+import React from "react"
 
 export default function Question(props) {
-    
+  
   return (
-    props.questions.map((item, index) => (
-      <div key={index}>
-        <Quiz 
-          question={item.question}
-        />
-        <Option
-          key={item.ID}
-          question={item.question}
-          answers={item.answerOptions}
-        />
-      </div>
-    ))
+    <div>
+<h1 className="question">{props.question}</h1>
+</div>
   );
 }
