@@ -52,23 +52,3 @@ export default function Quiz(props) {
     </div>
   );
 }
-
-
-/* WHY SPREAD OPERATOR IS NEEDED FOR SELECTEDOPTIONS--
-The direct modification of the selectedOptions array would have several consequences:
-
-Immutability Violation: React relies on immutability to efficiently detect state changes and trigger re-renders.
- When you modify the existing array directly, you violate this principle. 
- React might not recognize the change because the reference to the array remains the same, and as a result, it may not trigger re-renders.
-
-Unpredictable Behavior: Without immutability, your component's behavior becomes unpredictable. 
-Other components or functions that rely on the state might behave unexpectedly because they won't detect changes in the state due to the direct mutation.
-
-Debugging Challenges: Debugging issues related to state changes becomes more challenging when you modify state in place. 
-It can be difficult to track down where and how the state was changed, which can lead to hard-to-find bugs.
-
-So, if you do not use the spread operator and directly modify the selectedOptions array, the outcome would likely be that your component's UI may
- not update correctly in response to the state changes, and you might experience unexpected and difficult-to-debug issues in your application. 
- It's essential to follow React's recommended practices for state management, which include maintaining immutability by creating new objects or arrays 
- when updating state variables.
-*/
