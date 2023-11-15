@@ -56,11 +56,11 @@ export default function App() {
     <div>
 
       {
-      //startGame 
-      //? 
+      startGame 
+      ? 
       <Quiz questions={questions} /> 
-     // : 
-     // <Menu clickToStart={start} />
+     : 
+     <Menu clickToStart={start} />
     }
 
     </div>

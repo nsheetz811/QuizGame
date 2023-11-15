@@ -373,179 +373,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.default = Quiz;
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _Option = __webpack_require__(4);
-
-var _Option2 = _interopRequireDefault(_Option);
-
-var _Question = __webpack_require__(11);
-
-var _Question2 = _interopRequireDefault(_Question);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-// ...
-
-function Quiz(props) {
-  var _useState = (0, _react.useState)(0),
-      _useState2 = _slicedToArray(_useState, 2),
-      correct = _useState2[0],
-      setCorrect = _useState2[1];
-
-  var _useState3 = (0, _react.useState)([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      selectedOptions = _useState4[0],
-      setSelectedOptions = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      isChecked = _useState6[0],
-      setIsChecked = _useState6[1]; // Add isChecked state
-
-  function handleOptionSelected(option) {
-    var updatedAnswers = [].concat(_toConsumableArray(selectedOptions), [option]);
-    setSelectedOptions(updatedAnswers);
-  }
-
-  function checkCorrect(e) {
-    e.preventDefault();
-    var correctCount = 0;
-    for (var i = 0; i < props.questions.length; i++) {
-      var correctAnswer = props.questions[i].correctAnswer;
-      var selectedAnswer = selectedOptions[i];
-
-      if (selectedAnswer === correctAnswer) {
-        correctCount++;
-      }
-    }
-
-    setCorrect(correctCount);
-    setIsChecked(true); // Set isChecked to true after checking answers
-  }
-
-  return _react2.default.createElement(
-    "div",
-    null,
-    props.questions.map(function (item, index) {
-      return _react2.default.createElement(
-        "div",
-        { key: index },
-        _react2.default.createElement(_Question2.default, { question: item.question }),
-        _react2.default.createElement(_Option2.default, {
-          key: item.ID,
-          question: item.question,
-          answers: item.answerOptions,
-          handleOptionSelected: handleOptionSelected,
-          correctAnswer: item.correctAnswer,
-          isChecked: isChecked // Pass the isChecked state
-        })
-      );
-    }),
-    _react2.default.createElement(
-      "button",
-      { className: "button", onClick: checkCorrect },
-      "Check Answers"
-    )
-  );
-}
-
-/* WHY SPREAD OPERATOR IS NEEDED FOR SELECTEDOPTIONS--
-The direct modification of the selectedOptions array would have several consequences:
-
-Immutability Violation: React relies on immutability to efficiently detect state changes and trigger re-renders.
- When you modify the existing array directly, you violate this principle. 
- React might not recognize the change because the reference to the array remains the same, and as a result, it may not trigger re-renders.
-
-Unpredictable Behavior: Without immutability, your component's behavior becomes unpredictable. 
-Other components or functions that rely on the state might behave unexpectedly because they won't detect changes in the state due to the direct mutation.
-
-Debugging Challenges: Debugging issues related to state changes becomes more challenging when you modify state in place. 
-It can be difficult to track down where and how the state was changed, which can lead to hard-to-find bugs.
-
-So, if you do not use the spread operator and directly modify the selectedOptions array, the outcome would likely be that your component's UI may
- not update correctly in response to the state changes, and you might experience unexpected and difficult-to-debug issues in your application. 
- It's essential to follow React's recommended practices for state management, which include maintaining immutability by creating new objects or arrays 
- when updating state variables.
-*/
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.default = Option;
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Option(props) {
-  var _useState = (0, _react.useState)(),
-      _useState2 = _slicedToArray(_useState, 2),
-      selectedOption = _useState2[0],
-      setSelectedOption = _useState2[1];
-
-  function handleChange(option) {
-    setSelectedOption(option);
-    props.handleOptionSelected(option);
-  }
-
-  var optionElements = props.answers.map(function (item, index) {
-
-    return _react2.default.createElement(
-      "div",
-      {
-        key: index,
-        onClick: function onClick() {
-          return handleChange(item);
-        },
-        className: props.isChecked ? item === props.correctAnswer ? "correct" : item === selectedOption ? "incorrect" : "option" : item === selectedOption ? "selected" : "option"
-      },
-      item
-    );
-  });
-
-  return _react2.default.createElement(
-    "div",
-    { className: "quiz--homescreen" },
-    _react2.default.createElement(
-      "div",
-      { className: "option--container" },
-      optionElements
-    )
-  );
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
@@ -557,7 +384,7 @@ if (process.env.NODE_ENV === 'production') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports) {
 
 var g;
@@ -584,7 +411,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 7 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -612,7 +439,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,11 +457,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Menu = __webpack_require__(10);
+var _Menu = __webpack_require__(8);
 
 var _Menu2 = _interopRequireDefault(_Menu);
 
-var _Quiz = __webpack_require__(3);
+var _Quiz = __webpack_require__(11);
 
 var _Quiz2 = _interopRequireDefault(_Quiz);
 
@@ -701,18 +528,12 @@ function App() {
   return _react2.default.createElement(
     "div",
     null,
-
-    //startGame 
-    //? 
-    _react2.default.createElement(_Quiz2.default, { questions: questions })
-    // : 
-    // <Menu clickToStart={start} />
-
+    startGame ? _react2.default.createElement(_Quiz2.default, { questions: questions }) : _react2.default.createElement(_Menu2.default, { clickToStart: start })
   );
 }
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -758,7 +579,7 @@ if (process.env.NODE_ENV === 'production') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 10 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -801,7 +622,61 @@ function Menu(props) {
 }
 
 /***/ }),
-/* 11 */
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = Option;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Option(props) {
+  var _useState = (0, _react.useState)(),
+      _useState2 = _slicedToArray(_useState, 2),
+      selectedOption = _useState2[0],
+      setSelectedOption = _useState2[1];
+
+  function handleChange(option) {
+    setSelectedOption(option);
+    props.handleOptionSelected(option);
+  }
+
+  var optionElements = props.answers.map(function (item, index) {
+
+    return _react2.default.createElement(
+      "div",
+      {
+        key: index,
+        onClick: function onClick() {
+          return handleChange(item);
+        },
+        className: props.isChecked ? item === props.correctAnswer ? "correct" : item === selectedOption ? "incorrect" : "option" : item === selectedOption ? "selected" : "option"
+      },
+      item
+    );
+  });
+
+  return _react2.default.createElement(
+    "div",
+    { className: "option--homescreen" },
+    optionElements
+  );
+}
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -822,7 +697,7 @@ function Question(props) {
 
   return _react2.default.createElement(
     "div",
-    { className: "quiz--homescreen" },
+    { className: "question--homescreen" },
     _react2.default.createElement(
       "h1",
       { className: "question" },
@@ -830,6 +705,121 @@ function Question(props) {
     )
   );
 }
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = Quiz;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Option = __webpack_require__(9);
+
+var _Option2 = _interopRequireDefault(_Option);
+
+var _Question = __webpack_require__(10);
+
+var _Question2 = _interopRequireDefault(_Question);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// ...
+
+function Quiz(props) {
+  var _useState = (0, _react.useState)(0),
+      _useState2 = _slicedToArray(_useState, 2),
+      correct = _useState2[0],
+      setCorrect = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      selectedOptions = _useState4[0],
+      setSelectedOptions = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isChecked = _useState6[0],
+      setIsChecked = _useState6[1]; // Add isChecked state
+
+  function handleOptionSelected(option) {
+    var updatedAnswers = [].concat(_toConsumableArray(selectedOptions), [option]);
+    setSelectedOptions(updatedAnswers);
+  }
+
+  function checkCorrect(e) {
+    e.preventDefault();
+    var correctCount = 0;
+    for (var i = 0; i < props.questions.length; i++) {
+      var correctAnswer = props.questions[i].correctAnswer;
+      var selectedAnswer = selectedOptions[i];
+
+      if (selectedAnswer === correctAnswer) {
+        correctCount++;
+      }
+    }
+
+    setCorrect(correctCount);
+    setIsChecked(true); // Set isChecked to true after checking answers
+  }
+
+  return _react2.default.createElement(
+    "div",
+    { className: "help" },
+    props.questions.map(function (item, index) {
+      return _react2.default.createElement(
+        "div",
+        { key: index },
+        _react2.default.createElement(_Question2.default, { question: item.question }),
+        _react2.default.createElement(_Option2.default, {
+          key: item.ID,
+          question: item.question,
+          answers: item.answerOptions,
+          handleOptionSelected: handleOptionSelected,
+          correctAnswer: item.correctAnswer,
+          isChecked: isChecked // Pass the isChecked state
+        })
+      );
+    }),
+    _react2.default.createElement(
+      "button",
+      { className: "button", onClick: checkCorrect },
+      "Check Answers"
+    )
+  );
+}
+
+/* WHY SPREAD OPERATOR IS NEEDED FOR SELECTEDOPTIONS--
+The direct modification of the selectedOptions array would have several consequences:
+
+Immutability Violation: React relies on immutability to efficiently detect state changes and trigger re-renders.
+ When you modify the existing array directly, you violate this principle. 
+ React might not recognize the change because the reference to the array remains the same, and as a result, it may not trigger re-renders.
+
+Unpredictable Behavior: Without immutability, your component's behavior becomes unpredictable. 
+Other components or functions that rely on the state might behave unexpectedly because they won't detect changes in the state due to the direct mutation.
+
+Debugging Challenges: Debugging issues related to state changes becomes more challenging when you modify state in place. 
+It can be difficult to track down where and how the state was changed, which can lead to hard-to-find bugs.
+
+So, if you do not use the spread operator and directly modify the selectedOptions array, the outcome would likely be that your component's UI may
+ not update correctly in response to the state changes, and you might experience unexpected and difficult-to-debug issues in your application. 
+ It's essential to follow React's recommended practices for state management, which include maintaining immutability by creating new objects or arrays 
+ when updating state variables.
+*/
 
 /***/ }),
 /* 12 */
@@ -842,11 +832,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(9);
+var _reactDom = __webpack_require__(7);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _App = __webpack_require__(8);
+var _App = __webpack_require__(6);
 
 var _App2 = _interopRequireDefault(_App);
 
@@ -1203,7 +1193,7 @@ _reactDom2.default.render(_react2.default.createElement(_App2.default, null), do
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)(module), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module), __webpack_require__(4)))
 
 /***/ }),
 /* 14 */
@@ -18420,7 +18410,7 @@ _reactDom2.default.render(_react2.default.createElement(_App2.default, null), do
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4), __webpack_require__(5)(module)))
 
 /***/ }),
 /* 15 */
@@ -18502,7 +18492,7 @@ if (process.env.NODE_ENV !== "production") {
 
 var React = __webpack_require__(0);
 var _assign = __webpack_require__(2);
-var Scheduler = __webpack_require__(5);
+var Scheduler = __webpack_require__(3);
 var tracing = __webpack_require__(25);
 
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
@@ -44766,7 +44756,7 @@ exports.version = ReactVersion;
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0),m=__webpack_require__(2),r=__webpack_require__(5);function y(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(y(227));var ba=new Set,ca={};function da(a,b){ea(a,b);ea(a+"Capture",b)}
+var aa=__webpack_require__(0),m=__webpack_require__(2),r=__webpack_require__(3);function y(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(y(227));var ba=new Set,ca={};function da(a,b){ea(a,b);ea(a+"Capture",b)}
 function ea(a,b){ca[a]=b;for(a=0;a<b.length;a++)ba.add(b[a])}
 var fa=!("undefined"===typeof window||"undefined"===typeof window.document||"undefined"===typeof window.document.createElement),ha=/^[:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD][:A-Z_a-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\-.0-9\u00B7\u0300-\u036F\u203F-\u2040]*$/,ia=Object.prototype.hasOwnProperty,
 ja={},ka={};function la(a){if(ia.call(ka,a))return!0;if(ia.call(ja,a))return!1;if(ha.test(a))return ka[a]=!0;ja[a]=!0;return!1}function ma(a,b,c,d){if(null!==c&&0===c.type)return!1;switch(typeof b){case "function":case "symbol":return!0;case "boolean":if(d)return!1;if(null!==c)return!c.acceptsBooleans;a=a.toLowerCase().slice(0,5);return"data-"!==a&&"aria-"!==a;default:return!1}}

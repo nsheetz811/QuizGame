@@ -31,9 +31,10 @@ export default function Quiz(props) {
   }
 
   return (
-    <div>
+    <div className = "help">
       {props.questions.map((item, index) => (
         <div key={index}>
+      
           <Question question={item.question} />
           <Option
             key={item.ID}
@@ -72,3 +73,4 @@ So, if you do not use the spread operator and directly modify the selectedOption
  It's essential to follow React's recommended practices for state management, which include maintaining immutability by creating new objects or arrays 
  when updating state variables.
 */
+

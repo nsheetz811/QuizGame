@@ -34,12 +34,12 @@ export default function Option(props) {
   });
 
   return (
-    <div className="quiz--homescreen">
-  <div className="option--container">
+
+      <div className="option--homescreen">
     {optionElements}
     
-  </div>
- // </div>
+    </div>
+  
   )
 }
 
