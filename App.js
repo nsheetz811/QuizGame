@@ -29,7 +29,7 @@ export default function App() {
           const formattedQuestion = {
 
             question: he.decode(questionData.question),
-            answerOptions: _.shuffle(answerOptions),
+            answerOptions: _.shuffle(answerOptions.map(option => he.decode(option))),
             correctAnswer: he.decode(questionData.correct_answer),
             ID: nanoid()
 
@@ -49,6 +49,7 @@ export default function App() {
 
   const start = () => {
     setStartGame(true)
+    
   }
 
   return (
@@ -58,7 +59,7 @@ export default function App() {
       {
       startGame 
       ? 
-      <Quiz questions={questions} /> 
+      <Quiz questions={questions} setQuestions={setQuestions} fetchQuestions={fetchQuestions} />
      : 
      <Menu clickToStart={start} />
     }

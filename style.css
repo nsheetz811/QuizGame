@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+
 }
 
 .homescreen {
@@ -12,22 +13,27 @@
 
 }
 
-.help {
+body {
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    height: 100vh;
+    background: #F5F7FB;
+  }
+  
+.help{
+  border-style: dashed;
+  
 }
-
-.option--homescreen,question--homescreen {
+.option--homescreen{
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
     gap: 13px;
+    
 }
 
+.question{
+    word-wrap: break-word
+}
 .homescreen--button {
     width: 195px;
     height: 52px;
@@ -66,6 +72,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    width:500px;
 }
 
 .option,
@@ -73,23 +80,25 @@
 .incorrect {
     width: auto;
     padding: 10px;
-    height: auto;
+   
     flex-shrink: 0;
     border-radius: 8px;
     border: 0.794px solid #4D5B9E;
     color: #293264;
-    text-align: center;
+    text-align: left;
     font-family: Inter;
-    font-size: 10.24px;
+    font-size: 11px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    align-items: flex-start;
+    border-style: solid;
 }
 
 .selected {
     width: auto;
     padding: 10px;
-    height: auto;
+    
     color: #293264;
     text-align: center;
     font-family: Inter;
@@ -115,9 +124,9 @@
 }
 
 .correct {
-    background-color: green;
+    background-color:#94D7A2;
 }
 
 .incorrect {
-    background-color: red;
+    background-color: #F8BCBC;
 }

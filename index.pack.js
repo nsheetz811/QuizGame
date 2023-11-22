@@ -506,7 +506,9 @@ function App() {
         var formattedQuestion = {
 
           question: _he2.default.decode(questionData.question),
-          answerOptions: _lodash2.default.shuffle(answerOptions),
+          answerOptions: _lodash2.default.shuffle(answerOptions.map(function (option) {
+            return _he2.default.decode(option);
+          })),
           correctAnswer: _he2.default.decode(questionData.correct_answer),
           ID: (0, _nanoid.nanoid)()
 
@@ -528,7 +530,7 @@ function App() {
   return _react2.default.createElement(
     "div",
     null,
-    startGame ? _react2.default.createElement(_Quiz2.default, { questions: questions }) : _react2.default.createElement(_Menu2.default, { clickToStart: start })
+    startGame ? _react2.default.createElement(_Quiz2.default, { questions: questions, setQuestions: setQuestions, fetchQuestions: fetchQuestions }) : _react2.default.createElement(_Menu2.default, { clickToStart: start })
   );
 }
 
@@ -586,7 +588,7 @@ if (process.env.NODE_ENV === 'production') {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.default = Menu;
 
@@ -598,27 +600,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function Menu(props) {
 
-  return _react2.default.createElement(
-    "div",
-    { className: "homescreen" },
-    _react2.default.createElement("img", { className: "yellow_blob", src: "yellow_blob.png", alt: "yellow_blob" }),
-    _react2.default.createElement(
-      "h1",
-      null,
-      "Quizzical"
-    ),
-    _react2.default.createElement(
-      "p",
-      null,
-      "Some description if needed"
-    ),
-    _react2.default.createElement(
-      "button",
-      { className: "homescreen--button", onClick: props.clickToStart },
-      "Start Quiz"
-    ),
-    _react2.default.createElement("img", { className: "blue_blob", src: "blue_blob.png", alt: "yellow_blob" })
-  );
+    return _react2.default.createElement(
+        "div",
+        { className: "homescreen" },
+        _react2.default.createElement(
+            "h1",
+            null,
+            "Quizzical"
+        ),
+        _react2.default.createElement(
+            "p",
+            null,
+            "Some description if needed"
+        ),
+        _react2.default.createElement(
+            "button",
+            { className: "homescreen--button", onClick: props.clickToStart },
+            "Start Quiz"
+        ),
+        _react2.default.createElement("img", { className: "yellow_blob", src: "yellow_blob.png", alt: "yellow_blob" }),
+        _react2.default.createElement("img", { className: "blue_blob", src: "blue_blob.png", alt: "yellow_blob" })
+    );
 }
 
 /***/ }),
@@ -654,7 +656,6 @@ function Option(props) {
   }
 
   var optionElements = props.answers.map(function (item, index) {
-
     return _react2.default.createElement(
       "div",
       {
@@ -662,8 +663,7 @@ function Option(props) {
         onClick: function onClick() {
           return handleChange(item);
         },
-        className: props.isChecked ? item === props.correctAnswer ? "correct" : item === selectedOption ? "incorrect" : "option" : item === selectedOption ? "selected" : "option"
-      },
+        className: props.isChecked ? item === props.correctAnswer ? "correct" : item === selectedOption ? "incorrect" : "option" : item === selectedOption ? "selected" : "option" },
       item
     );
   });
@@ -671,7 +671,9 @@ function Option(props) {
   return _react2.default.createElement(
     "div",
     { className: "option--homescreen" },
-    optionElements
+    optionElements,
+    _react2.default.createElement("img", { className: "yellow_blob", src: "yellow_blob.png", alt: "yellow_blob" }),
+    _react2.default.createElement("img", { className: "blue_blob", src: "blue_blob.png", alt: "blue_blob" })
   );
 }
 
@@ -737,8 +739,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-// ...
-
 function Quiz(props) {
   var _useState = (0, _react.useState)(0),
       _useState2 = _slicedToArray(_useState, 2),
@@ -753,7 +753,12 @@ function Quiz(props) {
   var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
       isChecked = _useState6[0],
-      setIsChecked = _useState6[1]; // Add isChecked state
+      setIsChecked = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      replay = _useState8[0],
+      setReplay = _useState8[1];
 
   function handleOptionSelected(option) {
     var updatedAnswers = [].concat(_toConsumableArray(selectedOptions), [option]);
@@ -763,6 +768,10 @@ function Quiz(props) {
   function checkCorrect(e) {
     e.preventDefault();
     var correctCount = 0;
+    if (selectedOptions.length !== props.questions.length) {
+      alert("Please answer all questions before checking answers.");
+      return;
+    }
     for (var i = 0; i < props.questions.length; i++) {
       var correctAnswer = props.questions[i].correctAnswer;
       var selectedAnswer = selectedOptions[i];
@@ -774,6 +783,21 @@ function Quiz(props) {
 
     setCorrect(correctCount);
     setIsChecked(true); // Set isChecked to true after checking answers
+    setReplay(true);
+  }
+
+  function handleReset() {
+    setCorrect(0);
+    setSelectedOptions([]);
+    setIsChecked(false);
+    setReplay(function (prevState) {
+      return !prevState;
+    });
+
+    // Fetch new questions
+    setTimeout(function () {
+      props.fetchQuestions();
+    }, 1000);
   }
 
   return _react2.default.createElement(
@@ -794,10 +818,29 @@ function Quiz(props) {
         })
       );
     }),
-    _react2.default.createElement(
-      "button",
-      { className: "button", onClick: checkCorrect },
-      "Check Answers"
+    !isChecked ? _react2.default.createElement(
+      "div",
+      null,
+      _react2.default.createElement(
+        "button",
+        { className: "button", onClick: checkCorrect },
+        "Check Answers"
+      )
+    ) : _react2.default.createElement(
+      "div",
+      null,
+      _react2.default.createElement(
+        "h1",
+        null,
+        "Your score is: ",
+        correct,
+        " out of 5"
+      ),
+      _react2.default.createElement(
+        "button",
+        { className: "button", onClick: handleReset },
+        "Replay"
+      )
     )
   );
 }
