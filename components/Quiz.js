@@ -101,4 +101,3 @@ So, if you do not use the spread operator and directly modify the selectedOption
  It's essential to follow React's recommended practices for state management, which include maintaining immutability by creating new objects or arrays 
  when updating state variables.
 */
-
