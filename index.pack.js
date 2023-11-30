@@ -611,7 +611,7 @@ function Menu(props) {
         _react2.default.createElement(
             "p",
             null,
-            "Some description if needed"
+            "test your knowledge!"
         ),
         _react2.default.createElement(
             "button",
